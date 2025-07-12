@@ -1,31 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import CategoryGrid from './CategoryGrid'; // ✅ import the new component
 
 const featuredProducts = [
-  {
-    id: 1,
-    name: 'Denim Jacket',
-    pictureUrl: '/images/sample1.jpg',
-    price: 'Free Swap',
-  },
-  {
-    id: 2,
-    name: 'Cotton Kurti',
-    pictureUrl: '/images/sample2.jpg',
-    price: '80 Points',
-  },
-  {
-    id: 3,
-    name: 'Winter Scarf',
-    pictureUrl: '/images/sample3.jpg',
-    price: '50 Points',
-  },
-  {
-    id: 4,
-    name: 'Canvas Shoes',
-    pictureUrl: '/images/sample4.jpg',
-    price: 'Free Swap',
-  },
+  { id: 1, name: 'Denim Jacket', pictureUrl: '/images/sample1.jpg', price: 'Free Swap' },
+  { id: 2, name: 'Cotton Kurti', pictureUrl: '/images/sample2.jpg', price: '80 Points' },
+  { id: 3, name: 'Winter Scarf', pictureUrl: '/images/sample3.jpg', price: '50 Points' },
+  { id: 4, name: 'Canvas Shoes', pictureUrl: '/images/sample4.jpg', price: 'Free Swap' },
 ];
 
 const Hero = () => {
@@ -40,8 +21,8 @@ const Hero = () => {
         ReWear is a sustainable fashion platform where you can exchange your gently used clothes with others or redeem them using points. Give your wardrobe a fresh update without buying new.
       </p>
 
-      {/* ✅ Buttons with navigation */}
-      <div className="flex gap-4 flex-wrap justify-center mb-12">
+      {/* ✅ CTA Buttons */}
+      <div className="flex gap-4 flex-wrap justify-center mb-10">
         <button
           onClick={() => navigate('/swap-requests')}
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition"
@@ -56,7 +37,12 @@ const Hero = () => {
         </button>
       </div>
 
-      {/* Featured Products */}
+      {/* ✅ Category Grid (NEW) */}
+      <div className="w-full max-w-5xl mb-16">
+        <CategoryGrid />
+      </div>
+
+      {/* ✅ Featured Products */}
       <div className="w-full max-w-6xl">
         <h2 className="text-2xl font-semibold text-left mb-6">Featured Items</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

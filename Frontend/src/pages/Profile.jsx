@@ -99,6 +99,7 @@ const Profile = () => {
               />
               {errors.username && <p className="text-red-500 text-xs">{errors.username}</p>}
             </div>
+
             <div>
               <label className="text-sm">Email</label>
               <input
@@ -109,6 +110,7 @@ const Profile = () => {
               />
               {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
             </div>
+
             <div>
               <label className="text-sm">New Password</label>
               <input
@@ -118,6 +120,7 @@ const Profile = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
             <div>
               <label className="text-sm">Confirm Password</label>
               <input
@@ -139,6 +142,7 @@ const Profile = () => {
           </form>
         </div>
 
+        {/* Your Products & Requests Section */}
         <div className="lg:col-span-2 flex flex-col space-y-8">
           <div className="bg-white border rounded-xl p-6 shadow-lg">
             <h3 className="text-2xl font-bold mb-4 text-green-600">Your Products</h3>
@@ -168,10 +172,10 @@ const Profile = () => {
                       <p className="text-sm text-gray-500">Status: {req.status}</p>
                     </div>
                     <span className={`text-xs font-semibold px-2 py-1 rounded ${req.status === 'Accepted'
-                      ? 'bg-green-600 text-white'
-                      : req.status === 'Rejected'
-                        ? 'bg-red-600 text-white'
-                        : 'bg-yellow-500 text-black'
+                        ? 'bg-green-600 text-white'
+                        : req.status === 'Rejected'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-yellow-500 text-black'
                       }`}>
                       {req.status}
                     </span>
