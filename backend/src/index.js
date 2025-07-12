@@ -3,6 +3,8 @@ import { connectDB } from "./lib/db";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js"
 const app = express();
+const corsMiddleware = require("./middlewares/cors.middleware");
+app.use(corsMiddleware);
 
 app.use(express.json());
 app.use(cookieParser());
