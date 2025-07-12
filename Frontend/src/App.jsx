@@ -5,7 +5,9 @@ import SearchBar from "./components/SearchBar";
 import Hero from "./components/Hero";
 import Profile from "./pages/Profile";
 import BrowseItems from "./pages/BrowseItems";
-import SwapRequests from "./components/SwapRequests"; // ✅ NEW
+import SwapRequests from "./components/SwapRequests"; // ✅
+import About from "./pages/About"; // ✅ NEW
+import Contact from "./pages/Contact"; // ✅ NEW
 
 function App() {
   const handleSearch = (query) => {
@@ -37,6 +39,12 @@ function App() {
 
           {/* ✅ Swap Requests Page */}
           <Route path="/swap-requests" element={<SwapRequests />} />
+
+          {/* ✅ About Page */}
+          <Route path="/about" element={<About />} />
+
+          {/* ✅ Contact Page */}
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
 
