@@ -2,7 +2,6 @@ import User from "../models/user.model.js";
 import Swap from "../models/swap.model.js";
 import cloudinary from "../lib/cloudinary.js";
 
-// ✅ Get user profile (excluding password)
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -14,7 +13,6 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-// ✅ Secure point update (admin-only)
 export const updatePoints = async (req, res) => {
   try {
     const { amount } = req.body;
@@ -38,7 +36,6 @@ export const updatePoints = async (req, res) => {
   }
 };
 
-// ✅ Update profile picture (Cloudinary upload)
 export const updateProfile = async (req, res) => {
   try {
     const { profilePic } = req.body;
@@ -65,7 +62,6 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// ✅ Get incoming swap requests for current user
 export const getSwaprequest = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -81,7 +77,6 @@ export const getSwaprequest = async (req, res) => {
   }
 };
 
-// ✅ Get products the user has requested (based on user schema population)
 export const getProductsRequested = async (req, res) => {
   try {
     const { userId } = req.user;

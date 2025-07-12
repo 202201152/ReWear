@@ -1,24 +1,31 @@
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
+import cloudinary from "../lib/cloudinary.js"; // make sure this is configured
 
-// Create a new product (always marked as "pending" for admin approval)
+// Create a new product (with Cloudinary upload)
 export const createProduct = async (req, res) => {
   try {
     const userId = req.user.userId;
+    const { productImage, ...rest } = req.body;
 
+    if (!productImage || !productImage.startsWith("data:")) {
+      return res.status(400).json({ message: "Invalid or missing product image" });
+    }
+
+    const uploadResult = await cloudinary.uploader.upload(productImage);
     const product = new Product({
-      ...req.body,
+      ...rest,
+      productImage: uploadResult.secure_url,
       sellerId: userId,
-      status: "pending" // Force moderation
+      status: "pending",
     });
 
     await product.save();
-
-    // Optionally link product to user’s list
     await User.findByIdAndUpdate(userId, { $push: { productsListed: product._id } });
 
     res.status(201).json(product);
   } catch (err) {
+    console.error("Error in createProduct:", err.message);
     res.status(500).json({ error: err.message });
   }
 };
@@ -33,7 +40,7 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-// Search approved products by brand/type/description
+// Search approved products
 export const searchProducts = async (req, res) => {
   try {
     const { search } = req.body;
@@ -65,7 +72,7 @@ export const searchProducts = async (req, res) => {
   }
 };
 
-// Delete product (only by the seller)
+// Delete product (only by seller)
 export const deleteProduct = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -88,7 +95,7 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// Edit product (auto sets back to pending)
+// Edit product (re-upload image if provided, reset to pending)
 export const editProduct = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -102,11 +109,19 @@ export const editProduct = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
+    let updatedImageUrl = product.productImage;
+
+    if (productData.productImage && productData.productImage.startsWith("data:")) {
+      const uploadResult = await cloudinary.uploader.upload(productData.productImage);
+      updatedImageUrl = uploadResult.secure_url;
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
       {
         ...productData,
-        status: "pending" // re-moderate after edit
+        productImage: updatedImageUrl,
+        status: "pending",
       },
       { new: true }
     );
