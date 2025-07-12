@@ -19,7 +19,17 @@ const ProductSchema = new mongoose.Schema({
     requestedUserId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-    }]
+    }],
+    productImage: {
+        type: String,
+        req: true,
+        default: "",
+    },
+    points: {
+        type: Number,
+        req: true,
+        default: 0,
+    }
 })
 
 const Product = mongoose.model(ProductSchema);
