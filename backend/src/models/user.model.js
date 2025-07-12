@@ -1,43 +1,52 @@
-import mongoose from "mongoose"
+// backend/src/models/user.model.js
 
-const UserSchema = new mongoose.Schema({
+import mongoose from "mongoose";
+
+const UserSchema = new mongoose.Schema(
+  {
     userName: {
-        type: String, 
-        req: true,
+      type: String,
+      required: true, 
     },
     role: {
-        type: String,
-        enum: ["user", "admin"],
-        req: true,
+      type: String,
+      enum: ["user", "admin"],
+      default: "user", 
+      required: true,
     },
     email: {
-        type: String,
-        req: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        req: true,
-        minlength: 6,
+      type: String,
+      required: true,
+      minlength: 6,
     },
     profilePic: {
-        type: String,
-        default: "",
-
+      type: String,
+      default: "",
     },
     points: {
-        type: Number,
-        default: 0,
+      type: Number,
+      default: 0,
     },
-    productsListed: [{
+    productsListed: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-    }],
-    productsRequested: [{
+      },
+    ],
+    productsRequested: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-    }]
-}, {timestamps: true})
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-const User = mongoose.model(UserSchema);
+const User = mongoose.model("User", UserSchema);
 export default User;
