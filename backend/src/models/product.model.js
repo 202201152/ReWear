@@ -1,40 +1,54 @@
 import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema({
-    sellerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    },
-    productBrandName:{
-        type: String,
-    },
-    productType: {
-        type: String,
-        req: true,
-    },
-    description: {
-        type: String,
-        maxlength: 500,
-    },
-    requestedUserId: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }],
-    productImage: {
-        type: String,
-        req: true,
-        default: "",
-    },
-    points: {
-        type: Number,
-        req: true,
-        default: 0,
-    },
-    swapRequest: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }],
-})
+  sellerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  productBrandName: {
+    type: String,
+  },
+  productType: {
+    type: String,
+    required: true, // Fixed typo
+  },
+  description: {
+    type: String,
+    maxlength: 500,
+  },
+  requestedUserId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
+  ],
+  productImage: {
+    type: String,
+    required: true, // Fixed typo
+    default: "",
+  },
+  points: {
+    type: Number,
+    required: true, // Fixed typo
+    default: 0,
+  },
+  swapRequest: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
+  ],
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending", // For admin moderation
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  }
+});
 
-const Product = mongoose.model(ProductSchema);
+const Product = mongoose.model("Product", ProductSchema); // Fixed model creation
 export default Product;
