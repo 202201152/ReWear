@@ -6,7 +6,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Attach token to axios headers
   const setAuthToken = (token) => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -15,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Load user from localStorage on mount
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("token");
@@ -26,25 +24,19 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Login user
   const login = async (email, password) => {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
       email,
       password,
     });
-    const { token, user } = res.data;
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-    setAuthToken(token);
-    setUser(user);
+
+    const userData = res.data;
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setAuthToken(res.data.token);
+    setUser(userData);
   };
 
-  // Register new user
-  const register = async (userData) => {
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, userData);
-  };
-
-  // Logout
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -53,11 +45,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook
 export const useAuth = () => useContext(AuthContext);
+export { AuthContext }; // ✅ Export for direct use like in Navbar.jsx

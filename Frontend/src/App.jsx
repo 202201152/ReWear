@@ -1,3 +1,4 @@
+// src/App.jsx
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -5,9 +6,10 @@ import SearchBar from "./components/SearchBar";
 import Hero from "./components/Hero";
 import Profile from "./pages/Profile";
 import BrowseItems from "./pages/BrowseItems";
-import SwapRequests from "./components/SwapRequests"; // ✅
-import About from "./pages/About"; // ✅ NEW
-import Contact from "./pages/Contact"; // ✅ NEW
+import SwapRequests from "./components/SwapRequests";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import ProtectedRoute from "./components/ProtectedRoute"; // ✅ Import this
 
 function App() {
   const handleSearch = (query) => {
@@ -31,19 +33,36 @@ function App() {
             }
           />
 
-          {/* ✅ Profile Page */}
-          <Route path="/profile" element={<Profile />} />
+          {/* ✅ Protected Routes */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* ✅ Browse Items Page */}
-          <Route path="/browse" element={<BrowseItems />} />
+          <Route
+            path="/browse"
+            element={
+              <ProtectedRoute>
+                <BrowseItems />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* ✅ Swap Requests Page */}
-          <Route path="/swap-requests" element={<SwapRequests />} />
+          <Route
+            path="/swap-requests"
+            element={
+              <ProtectedRoute>
+                <SwapRequests />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* ✅ About Page */}
+          {/* ✅ Public Pages */}
           <Route path="/about" element={<About />} />
-
-          {/* ✅ Contact Page */}
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
