@@ -25,6 +25,11 @@ const Footer = () => {
           Made with 💚 for a greener planet.
         </div>
       </div>
+      <div className="text-sm text-green-100 ">Made by 
+        Raagan Patel,\n
+        Harshal Patel,
+       Krushnadev Rayjada
+        </div>
     </footer>
   );
 };
