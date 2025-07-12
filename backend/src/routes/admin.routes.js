@@ -1,17 +1,26 @@
-// backend/src/routes/admin.routes.js
 import express from "express";
-import { getAllUsers, deleteUser, getAllProductsAdmin, getAllSwaps } from "../controllers/admin.controller.js";
+import {
+  getPendingProducts,
+  approveProduct,
+  rejectProduct,
+  deleteProduct,
+  getAdminStats,
+} from "../controllers/admin.controller.js";
 import { protectRoute } from "../middlewares/auth.middleware.js";
-import { requireAdmin } from "../middlewares/admin.js";
+import { requireAdmin } from "../middlewares/admin.middleware.js";
 
 const router = express.Router();
 
-router.use(protectRoute, requireAdmin); // middleware chain
+router.use(protectRoute);
+router.use(adminOnly);
 
-router.get("/users", getAllUsers);
-router.delete("/users/:userId", deleteUser);
+router.get("/products/pending", getPendingProducts);
 
-router.get("/products", getAllProductsAdmin);
-router.get("/swaps", getAllSwaps);
+router.patch("/products/:productId/approve", approveProduct);
+router.patch("/products/:productId/reject", rejectProduct);
+
+router.delete("/products/:productId", deleteProduct);
+
+router.get("/stats", getAdminStats);
 
 export default router;
