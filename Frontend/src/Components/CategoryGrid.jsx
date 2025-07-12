@@ -1,15 +1,15 @@
 import React from 'react';
 
 const categories = [
-  { name: 'T-Shirts', image: '/images/black.jpg' },
-  { name: 'Jeans', image: '/images/blue.jpg' },
-  { name: 'Jackets', image: '/images/white.jpg' },
-  { name: 'Ethnic Wear', image: '/images/yellow.jpg' },
-  { name: 'Shoes', image: '/images/sample4.jpg' },
-  { name: 'Accessories', image: '/images/watch.svg' },
-  { name: 'Sweaters', image: '/images/sample3.jpg' },
-  { name: 'Dresses', image: '/images/sample2.jpg' },
-  { name: 'Kidswear', image: '/images/sample1.jpg' },
+  { name: 'T-Shirts', image: '../assests/images/shirt2.png' },
+  { name: 'Jeans', image: '../assests/images/jeans2.png' },
+  { name: 'Jackets', image: '../assests/images/shirt4.png' },
+  { name: 'Ethnic Wear', image: '../assests/images/kurti1.png' },
+  { name: 'Shoes', image: '../assests/images/g-shoe1.png' },
+  { name: 'Accessories', image: '../assests/images/heels1.png' },
+  { name: 'Sweaters', image: '../assests/images/kurti3.png' },
+  { name: 'Dresses', image: '../assests/images/joggers1.png' },
+  { name: 'Kidswear', image: '../assests/images/heels2.png' },
 ];
 
 const CategoryGrid = () => {
