@@ -29,7 +29,11 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         req: true,
         default: 0,
-    }
+    },
+    swapRequest: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
 })
 
 const Product = mongoose.model(ProductSchema);
