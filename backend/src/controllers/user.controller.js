@@ -1,6 +1,7 @@
-const User = require("../models/user.model");
+import User from "../models/user.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
-exports.getUserProfile = async (req, res) => {
+export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ error: "User not found" });
@@ -10,7 +11,7 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-exports.updatePoints = async (req, res) => {
+export const updatePoints = async (req, res) => {
   try {
     const { amount } = req.body;
     const user = await User.findById(req.user.id);
@@ -21,3 +22,26 @@ exports.updatePoints = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+        const {profilePic} = req.body;
+        const email = req.user.email;
+        if(!profilePic){
+            return res.status(500).json({message: "profile pic is not uploaded"});
+        }
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        console.log("cloudinary response: ", uploadResponse);
+
+        const user = await User.findOneAndUpdate({email}, 
+            { profilePic: uploadResponse.secure_url},
+            { new: true },
+        )
+        console.log("User updated successfully");
+        return res.status(200).json({message: "Profile Picture Updated Successfully"});
+
+    } catch (error) {
+        console.log("error in updateProfile controller: ", error.message);
+        return res.status(500).json({message: "Internal Server Error"});
+    }
+}

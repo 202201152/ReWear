@@ -1,9 +1,9 @@
 import express from "express"
-import { connectDB } from "./lib/db";
+import { connectDB } from "./src/lib/db.js";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes.js"
+import authRoutes from "./src/routes/auth.routes.js"
+import corsMiddleware from './src/middlewares/cors.middleware.js'
 const app = express();
-const corsMiddleware = require("./middlewares/cors.middleware");
 app.use(corsMiddleware);
 
 app.use(express.json());
@@ -11,8 +11,8 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 
+
 app.listen(process.env.PORT , () => {
     console.log("server is running.");
     connectDB();
-
-})
+});
