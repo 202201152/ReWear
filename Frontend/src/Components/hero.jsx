@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const featuredProducts = [
   {
@@ -28,25 +29,34 @@ const featuredProducts = [
 ];
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="w-full bg-white text-black py-20 px-6 flex flex-col items-center text-center">
-      {/* Hero Title & CTA */}
       <h1 className="text-4xl sm:text-5xl font-bold mb-4">
         ReWear: Swap Clothes, Save the Planet 🌍
       </h1>
       <p className="text-lg sm:text-xl text-gray-700 max-w-2xl mb-8">
         ReWear is a sustainable fashion platform where you can exchange your gently used clothes with others or redeem them using points. Give your wardrobe a fresh update without buying new.
       </p>
+
+      {/* ✅ Buttons with navigation */}
       <div className="flex gap-4 flex-wrap justify-center mb-12">
-        <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition">
+        <button
+          onClick={() => navigate('/swap-requests')}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition"
+        >
           Start Swapping
         </button>
-        <button className="border border-green-600 text-green-700 px-6 py-3 rounded-xl font-medium hover:bg-green-100 transition">
+        <button
+          onClick={() => navigate('/browse')}
+          className="border border-green-600 text-green-700 px-6 py-3 rounded-xl font-medium hover:bg-green-100 transition"
+        >
           Browse Items
         </button>
       </div>
 
-      {/* Featured Products Section */}
+      {/* Featured Products */}
       <div className="w-full max-w-6xl">
         <h2 className="text-2xl font-semibold text-left mb-6">Featured Items</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
