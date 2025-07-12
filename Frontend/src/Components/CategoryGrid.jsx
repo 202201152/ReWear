@@ -37,5 +37,4 @@ const CategoryGrid = () => {
     </div>
   );
 };
-
 export default CategoryGrid;
