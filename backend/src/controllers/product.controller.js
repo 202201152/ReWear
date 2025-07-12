@@ -1,8 +1,8 @@
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
-import cloudinary from "../lib/cloudinary.js"; // make sure this is configured
+import cloudinary from "../lib/cloudinary.js";
 
-// Create a new product (with Cloudinary upload)
+// Create product (image upload + pending status)
 export const createProduct = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -30,63 +30,60 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// Get all APPROVED products
+// Get all products (admin sees all, users see only approved)
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find({ status: "approved" }).populate("sellerId", "name email");
+    const filter = req.user.role === "admin" ? {} : { status: "approved" };
+    const products = await Product.find(filter).populate("sellerId", "name email");
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Search approved products
+// Search products
 export const searchProducts = async (req, res) => {
   try {
     const { search } = req.body;
     const rawSearch = search.trim();
 
-    if (!rawSearch) {
-      return res.status(400).json({ message: "Search term cannot be blank" });
-    }
+    if (!rawSearch) return res.status(400).json({ message: "Search term cannot be blank" });
 
-    const regex = new RegExp(rawSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "i");
+    const regex = new RegExp(rawSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    const statusFilter = req.user.role === "admin" ? {} : { status: "approved" };
 
     const products = await Product.find({
-      status: "approved",
+      ...statusFilter,
       $or: [
         { productBrandName: regex },
         { productType: regex },
-        { description: regex }
-      ]
+        { description: regex },
+      ],
     });
 
-    if (!products || products.length === 0) {
-      return res.status(404).json({ message: "No products found." });
-    }
-
+    if (!products.length) return res.status(404).json({ message: "No products found." });
     return res.status(200).json(products);
   } catch (error) {
-    console.error("Error in searchProducts controller:", error.message);
+    console.error("Error in searchProducts:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// Delete product (only by seller)
+// Delete product (only seller or admin)
 export const deleteProduct = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const { userId, role } = req.user;
     const { productId } = req.params;
 
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    if (userId !== product.sellerId.toString()) {
+    if (userId !== product.sellerId.toString() && role !== "admin") {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
     await Product.findByIdAndDelete(productId);
-    await User.findByIdAndUpdate(userId, { $pull: { productsListed: productId } });
+    await User.findByIdAndUpdate(product.sellerId, { $pull: { productsListed: productId } });
 
     return res.status(200).json({ message: "Product deleted successfully" });
   } catch (error) {
@@ -95,17 +92,17 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// Edit product (re-upload image if provided, reset to pending)
+// Edit product (image update + reset to pending)
 export const editProduct = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const { userId, role } = req.user;
     const { productId } = req.params;
     const { productData } = req.body;
 
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    if (userId !== product.sellerId.toString()) {
+    if (userId !== product.sellerId.toString() && role !== "admin") {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
