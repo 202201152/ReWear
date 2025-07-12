@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const swapSchema = new mongoose.Schema({
   item: {
     type: mongoose.Schema.Types.ObjectId,
@@ -37,4 +36,5 @@ const swapSchema = new mongoose.Schema({
   respondedAt: Date,
 });
 
-module.exports = mongoose.model("Swap", swapSchema);
+const Swap = mongoose.model("Swap", swapSchema);
+export default Swap;
