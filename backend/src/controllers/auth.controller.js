@@ -9,9 +9,21 @@ export const login = async (req, res) => {
             return res.status(400).json({message: "fill the required fields."});
         }
         const user = await User.findOne({email});
-        if(!user) 
+        if(!user) {
+            return res.status(400).json({message: "user not found. try to register."});
+        }
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if(!isPasswordCorrect) return res.status(403).json({message: "wrong email or password"});
+        generateToken(user._id, res);
+        return res.status(201).json({
+            userName: user.userName,
+            email: user.email,
+            _id: user._id,
+            profilePic: user.profilePic,
+        });
     } catch (error) {
-        
+        console.log("error in login auth controller");
+        return res.status(500).json({message: "Internal Server Error"});
     }
 }
 export const signup = async (req, res) => {
@@ -45,7 +57,14 @@ export const signup = async (req, res) => {
     }
 }
 export const logout = (req, res) => {
-
+    try {
+        res.cookie = ("jwt", "", {maxAge: 0});
+        console.log("logged out successfully");
+        return res.status(200).json({message: "logged out successfully."});
+    } catch (error) {
+        console.log("error in logout auth controller");
+        return res.status(500).json({message: "Internal Server Error"});
+    }
 }
 export const checkAuth = (req, res) => {
 
