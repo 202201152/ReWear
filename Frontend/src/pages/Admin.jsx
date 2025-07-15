@@ -102,4 +102,8 @@ const StatCard = ({ label, value, color }) => (
     </div>
 );
 
+<<<<<<< HEAD
 export default Admin;
+=======
+export default Admin;
+>>>>>>> e190c12daa3761ba3460b57dc22d551c0532c9f8

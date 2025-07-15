@@ -1,9 +1,17 @@
-import Swap from "../models/swap.model.js"; 
+import Swap from "../models/swap.model.js";
+import Product from "../models/product.model.js";
 
 export const createSwapRequest = async (req, res) => {
   try {
     const { item, receiver, method, pointsUsed } = req.body;
     const requester = req.user.userId;
+
+    const product = await Product.findById(item);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    if (product.status !== "approved") {
+      return res.status(400).json({ message: "Cannot request swap on unapproved product." });
+    }
 
     const swap = new Swap({
       item,
@@ -16,7 +24,7 @@ export const createSwapRequest = async (req, res) => {
     await swap.save();
     return res.status(201).json(swap);
   } catch (error) {
-    console.error("Error creating swap request:", error);
+    console.error("Error creating swap request:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -39,7 +47,7 @@ export const approveSwapRequest = async (req, res) => {
 
     return res.status(200).json({ message: "Swap approved", swap });
   } catch (error) {
-    console.error("Error approving swap request:", error);
+    console.error("Error approving swap request:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -57,7 +65,7 @@ export const getUserSwaps = async (req, res) => {
 
     return res.status(200).json(swaps);
   } catch (error) {
-    console.error("Error fetching user swaps:", error);
+    console.error("Error fetching user swaps:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
