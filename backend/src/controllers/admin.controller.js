@@ -1,5 +1,5 @@
-import Product from "../models/Product.js";
-import User from "../models/User.js";
+import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
 export const getPendingProducts = async (req, res) => {
   try {
     const products = await Product.find({ status: "pending" })

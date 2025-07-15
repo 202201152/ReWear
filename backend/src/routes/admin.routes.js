@@ -12,7 +12,7 @@ import { requireAdmin } from "../middlewares/admin.middleware.js";
 const router = express.Router();
 
 router.use(protectRoute);
-router.use(adminOnly);
+router.use(requireAdmin);
 
 router.get("/products/pending", getPendingProducts);
 
