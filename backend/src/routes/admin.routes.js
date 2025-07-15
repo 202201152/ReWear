@@ -23,4 +23,4 @@ router.delete("/products/:productId", deleteProduct);
 
 router.get("/stats", getAdminStats);
 
-export default router;
+// export default router;

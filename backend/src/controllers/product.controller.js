@@ -129,3 +129,15 @@ export const editProduct = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const getItem = async (req, res) => {
+  try {
+    const {itemId} = req.params;
+    const product = await Product.findById(itemId).populate("sellerID");
+    if(!product) return res.status(404).json({message: "Product not found."});
+    return res.status(200).json(product);
+  } catch (error) {
+    console.error("Error in getItem product controller", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
