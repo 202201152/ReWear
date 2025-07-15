@@ -10,6 +10,7 @@ import SwapRequests from "./components/SwapRequests";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProtectedRoute from "./components/ProtectedRoute"; // ✅ Import this
+import ItemDetails from "./pages/ItemDetail";
 
 function App() {
   const handleSearch = (query) => {
@@ -60,6 +61,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/item/:id"
+            element={
+              <ProtectedRoute>
+                <ItemDetails />
+              </ProtectedRoute>
+            }
+          />
+
+
+          {/* ✅ Admin Routes */}
 
           {/* ✅ Public Pages */}
           <Route path="/about" element={<About />} />
